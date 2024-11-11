@@ -1,0 +1,38 @@
+(function() {
+    // Override all prevent defaults
+    window.onbeforeunload = null;
+    
+    // Remove all event listeners
+    const events = ['contextmenu', 'copy', 'cut', 'paste', 'mousedown', 'selectstart', 'dragstart', 'keydown', 'keyup'];
+    events.forEach(event => {
+        document.removeEventListener(event, function(e) { e.preventDefault(); }, true);
+        window.removeEventListener(event, function(e) { e.preventDefault(); }, true);
+        document.addEventListener(event, function(e) { e.stopImmediatePropagation(); }, true);
+    });
+
+    // Force enable selection
+    const css = `* {
+        -webkit-user-select: text !important;
+        -moz-user-select: text !important;
+        -ms-user-select: text !important;
+        user-select: text !important;
+        -webkit-touch-callout: default !important;
+    }`;
+    
+    const style = document.createElement('style');
+    style.innerHTML = css;
+    document.head.appendChild(style);
+    
+    // Clear all inline event handlers
+    document.querySelectorAll('*').forEach(element => {
+        element.oncontextmenu = null;
+        element.oncopy = null;
+        element.oncut = null;
+        element.onpaste = null;
+        element.onselectstart = null;
+        element.onmousedown = null;
+        element.ondragstart = null;
+        element.onkeydown = null;
+        element.onkeyup = null;
+    });
+})();
